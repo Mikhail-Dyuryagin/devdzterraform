@@ -19,7 +19,7 @@ provider "aws" {
 
 variable "domains" {
   type	= "list"
-  default = ["lb-dm", "app-dm"]
+  default = ["lb2-dm", "app2-dm"]
 }
 
 resource "random_string" "password" {
@@ -70,6 +70,17 @@ tags { Name="${element(var.domains, count.index)}.devops.srwx.net"}
 
 }
 
+
+resource "aws_route53_record" "devops_fall_dns" {
+  count   = "${length(var.domains)}"
+  zone_id = "${var.zone_id}"
+  name  = "${element(var.domains, count.index)}.devops.srwx.net"
+  type  = "A"
+  ttl= "300"
+  records = ["${element(aws_instance.devdz.*.public_ip, count.index)}"]
+}
+
+
 resource "local_file" "ansible_inventory" {
     content     = "[web]\n${element(var.domains, 0)}.devops.srwx.net ansible_ssh_user=ubuntu  letsencrypt_email=denergym@mail.ru  domain_name1=${element(var.domains, 0)}.devops.srwx.net domain_name2=${element(var.domains, 1)}.devops.srwx.net \n[api]\n${element(var.domains, 1)}.devops.srwx.net ansible_ssh_user=ubuntu"
      filename = "inventory/calc"
@@ -91,13 +102,3 @@ resource "null_resource" "deploy" {
  
  }
 }
-
-resource "aws_route53_record" "devops_fall_dns" {
-  count   = "${length(var.domains)}"
-  zone_id = "${var.zone_id}"
-  name	= "${element(var.domains, count.index)}.devops.srwx.net"
-  type	= "A"
-  ttl= "300"
-  records = ["${element(aws_instance.devdz.*.public_ip, count.index)}"]
-}
-
