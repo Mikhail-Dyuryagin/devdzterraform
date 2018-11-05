@@ -1,15 +1,9 @@
-# ansible-goapp
----------------------------------------
-myhost - inventory file
+Add your key to terraform.tfvars
 
-pre.yml - pre-insalltion python on host
+aws_access_key = "yourkey"
 
-goapp.yml - main file
+aws_secret_key = "yourkey"
 
-
---------------------------------------------
-
-
-keep calm and push this command:
-
-ansible-playbook -i inventory/myhosts goapp.yml
+and  
+terraform init
+terraform apply
