@@ -1,0 +1,23 @@
+
+---
+######## Front install
+
+ - name: Delete git front
+   file:
+     path=/var/www/{{ domain_name1 }}
+     state=absent
+
+ - name: clone app repo
+   git:
+     repo: 'https://github.com/Mikhail-Dyuryagin/web-front'
+     dest: /var/www/{{ domain_name1 }}
+   notify:
+     - restart nginx
+
+
+ - name: Delete git naher
+   file: 
+     path=/var/www/{{ domain_name1 }}/.git
+     state=absent
+
+

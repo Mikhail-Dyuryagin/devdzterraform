@@ -1,0 +1,11 @@
+---
+- hosts: web
+  remote_user: ubuntu
+  become: yes
+
+  roles:
+    - git
+    - nginx
+    - letsencrypt
+    - web-front
+    

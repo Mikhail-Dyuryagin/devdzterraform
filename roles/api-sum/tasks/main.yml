@@ -1,0 +1,48 @@
+---
+ - name: Mkdir src
+   file:
+     path: /opt/{{ item }}
+     state: directory
+   with_items:
+      - src
+ 
+ - name: ADD GOPATH
+   shell: export GOPATH=/opt/src/
+
+
+######## App install
+ - name: del old rep api
+   file:
+     path=/opt/src/api-sum
+     state=absent
+
+
+ - name: clone app repo
+   git:
+     repo: 'https://github.com/Mikhail-Dyuryagin/api-sum'
+     dest: /opt/src/api-sum
+
+ - name: build goapp
+   shell: go build main.go
+   args:
+     chdir: /opt/src/api-sum
+   notify: restart goapp
+
+
+
+ - name: goapp systemd
+   template:
+     src: goapp.service 
+     dest: /etc/systemd/system/goapp.service
+     owner: root
+     group: root 
+     mode: 0644
+   notify:
+     - reload systemd
+     - enable goapp
+     - restart goapp 
+
+ - name: Delete git naher
+   file: 
+     path=/opt/src/api-sum/.git
+     state=absent

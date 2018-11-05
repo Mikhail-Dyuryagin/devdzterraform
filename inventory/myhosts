@@ -1,0 +1,2 @@
+[web]
+denergym.devops.srwx.net  ansible_ssh_user=root ansible_ssh_pass=DVM7JqfmluyhAr  letsencrypt_email=denergym@mail.ru  domain_name=denergym.devops.srwx.net

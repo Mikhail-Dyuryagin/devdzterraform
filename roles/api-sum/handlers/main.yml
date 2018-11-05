@@ -1,0 +1,9 @@
+---
+ - name: reload systemd
+   systemd: daemon_reload=yes
+
+ - name: enable goapp
+   systemd: name=goapp enabled=yes
+
+ - name: restart goapp
+   systemd: name=goapp state=restarted

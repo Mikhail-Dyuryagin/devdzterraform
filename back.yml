@@ -1,0 +1,9 @@
+---
+- hosts: api
+  remote_user: ubuntu
+  become: yes
+
+  roles:
+    - goolang
+    - git
+    - api-sum  

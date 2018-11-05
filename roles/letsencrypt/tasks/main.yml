@@ -1,0 +1,51 @@
+---
+ - name: Install letsencrypt
+   apt:
+     name:
+       - letsencrypt
+     state: present
+     autoclean: yes
+
+ - name: Mkdir ssl
+   file:
+     path: /opt/{{ item }}
+     state: directory
+   with_items:
+     - src/ssl
+
+ - name: Mkdir www
+   file:
+     path: /var/www/{{ item }}
+     state: directory
+   with_items:
+     - letsencrypt
+
+
+ - name: Location 80
+   template:
+     src: nginx80.j2
+     dest: /etc/nginx/sites-enabled/nginx80.conf
+   notify: restart nginx
+ 
+ - name: Force reset nginx  
+   meta: flush_handlers
+ 
+ - name: Create cert letsencrypt
+   shell: letsencrypt certonly -n --webroot -w /var/www/letsencrypt/  -m {{ letsencrypt_email}} --agree-tos -d {{domain_name1}}
+   args:
+     creates: /etc/letsencrypt/live/{{ domain_name1 }}
+   notify: restart nginx  
+
+ - name: Location SSL
+   template:
+     src: nginxall.j2
+     dest: /etc/nginx/sites-enabled/nginxall.conf
+   notify: restart nginx
+
+ - name: Cronjob  for letsencrypt
+   cron:
+     name: letsencrypt_renew
+     special_time: weekly      
+     job: letsencrypt --renew certonly -n --webroot -w /opt/src/ssl -m {{ letsencrypt_email  }} --agree-tos -d {{domain_name1}}
+   notify: restart nginx
+
