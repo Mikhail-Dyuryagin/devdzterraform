@@ -1,4 +1,0 @@
-[web]
-front-lb.devops.srwx.net ansible_ssh_user=ubuntu  letsencrypt_email=denergym@mail.ru  domain_name1=front-lb.devops.srwx.net domain_name2=back-app.devops.srwx.net 
-[api]
-back-app.devops.srwx.net ansible_ssh_user=ubuntu

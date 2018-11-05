@@ -1,5 +1,5 @@
 resource "local_file" "ansible_inventory" {
-    content     = "[web]\n${element(var.domains, 0)}.devops.srwx.net ansible_ssh_user=ubuntu  letsencrypt_email=denergym@mail.ru  domain_name1=${element(var.domains, 0)}.devops.srwx.net domain_name2=${element(v$
+    content     = "[web]\n${element(var.domains, 0)}.devops.srwx.net ansible_ssh_user=ubuntu  letsencrypt_email=denergym@mail.ru  domain_name1=${element(var.domains, 0)}.devops.srwx.net domain_name2=${element(var.domains, 1)}.devops.srwx.net \n[api]\n${element(var.domains, 1)}.devops.srwx.net ansible_ssh_user=ubuntu"
      filename = "inventory/calc"
 }
 
